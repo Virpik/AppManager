@@ -15,6 +15,7 @@ struct AppBundleInfo {
         static let cfBundleIdentifier = String(kCFBundleIdentifierKey)
         static let cfBundleName = String(kCFBundleNameKey)
         static let cfBundleVersion = String(kCFBundleVersionKey)
+        static let cfBundleShortVersionString = "CFBundleShortVersionString"
     }
 
     let localizationNativeDevelopmentRegion: String? // CFBundleDevelopmentRegion
@@ -27,6 +28,8 @@ struct AppBundleInfo {
 
     let bundleVersion: String? // CFBundleVersion
     
+    let bundleVersionsStringShort: String? // CFBundleShortVersionString
+    
     init() {
         let bundle = Bundle.main
         let dictionary = bundle.infoDictionary ?? [:]
@@ -36,5 +39,6 @@ struct AppBundleInfo {
         self.bundleIdentifier = dictionary[CFBundleKeys.cfBundleIdentifier] as? String
         self.bundleName = dictionary[CFBundleKeys.cfBundleName] as? String
         self.bundleVersion = dictionary[CFBundleKeys.cfBundleVersion] as? String
+        self.bundleVersionsStringShort = dictionary[CFBundleKeys.cfBundleShortVersionString] as? String
     }
 }
