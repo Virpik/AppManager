@@ -9,6 +9,7 @@
 import Foundation
 
 struct AppRunOption {
+    var buildVersion: String!
     var appVersion: String!
     var launchDate: Date!
 
@@ -16,7 +17,8 @@ struct AppRunOption {
         
     }
     
-    init(appVersion: String, launchDate: Date) {
+    init(appVersion: String, buildVersion: String, launchDate: Date) {
+        self.buildVersion = buildVersion
         self.appVersion = appVersion
         self.launchDate = launchDate
     }

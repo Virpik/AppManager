@@ -9,7 +9,7 @@
 import Foundation
 
 class AppManager {
-    static let shaared: AppManager = AppManager()
+    static let shared: AppManager = AppManager()
     
     private(set) var appRunOption: AppRunOption
     private(set) var appRunOptions: [AppRunOption]
@@ -22,6 +22,17 @@ class AppManager {
     
     var service: AppManagerService?
     
+    var appId: String {
+        var appid: LocalItem<String> = LocalItem(key: "T_app_id")
+        
+        if let value = appid.value {
+            return value
+        }
+        
+        appid.value = UIDevice.current.identifierForVendor?.uuidString
+        
+        return appid.value!
+    }
     
     private init() {
         self.appRunOption = AppRunOption()
@@ -30,7 +41,7 @@ class AppManager {
     
     func didFinishLaunch() {
         self.appRunOptions = self.service?.appRunOptions.sorted(by: {
-            $0.launchDate > $1.launchDate
+            $0.launchDate < $1.launchDate
         }) ?? []
         
         self.isFirstRun = false
@@ -43,12 +54,14 @@ class AppManager {
         
         let bundleInfo = AppBundleInfo()
         
-        let version = bundleInfo.bundleVersion ?? ""
+        let buildVersion = bundleInfo.bundleVersion ?? ""
+        let appVersion = bundleInfo.bundleVersionsStringShort ?? ""
         
         var appRunOption = AppRunOption()
         
         appRunOption.launchDate = date
-        appRunOption.appVersion = version
+        appRunOption.appVersion = appVersion
+        appRunOption.buildVersion = buildVersion
         
         self.appRunOption = appRunOption
         
@@ -62,9 +75,9 @@ class AppManager {
         print("isFirstRun: ", self.isFirstRun)
         print("numberOfRun: ", self.numberOfRun)
         print(" -- current run info -- ")
-        print("    date: ", self.appRunOption.launchDate)
+        print("    date: ", self.appRunOption.launchDate.string(format: "dd/MM/yyyy hh:mm"))
+        print("    bundle version: ", self.appRunOption.buildVersion)
         print("    version: ", self.appRunOption.appVersion)
         print("============================================")
-        
     }
 }
