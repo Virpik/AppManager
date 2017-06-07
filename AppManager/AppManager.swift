@@ -15,7 +15,19 @@ class AppManager {
     private(set) var appRunOptions: [AppRunOption]
     
     private(set) var isFirstRun: Bool = false
-   
+    
+    var isFirstRunCurrentVersion: Bool {
+        return self.countRunCurrentVersion == 1
+    }
+    
+    var countRunCurrentVersion: Int {
+        guard let appVersion = self.appRunOption.appVersion else {
+            return 0
+        }
+        
+        return self.countRunSpecial(version: appVersion)
+    }
+    
     var numberOfRun: Int {
         return self.appRunOptions.count
     }
@@ -37,6 +49,10 @@ class AppManager {
     private init() {
         self.appRunOption = AppRunOption()
         self.appRunOptions = []
+    }
+    
+    func countRunSpecial(version: String) -> Int {
+        return self.appRunOptions.filter({ $0.appVersion == version }).count
     }
     
     func didFinishLaunch() {
